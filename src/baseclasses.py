@@ -1,5 +1,6 @@
-import abc
 from typing import Optional
+from src.dev_utils import todo
+import abc
 
 class Pin (abc.ABC):
 
@@ -48,6 +49,7 @@ class Output (Pin):
 
     _connections: list['Input']
     parent: 'Chip'
+    _value: int
 
     def __init__ (self, parent: 'Chip'):
         self.connections = []
@@ -55,14 +57,16 @@ class Output (Pin):
 
     @property
     def value (self) -> int:
-        # Output should implement how it determines its value
-        # This is a placeholder - subclasses should override this
-        return 0
+        if self.parent.updated:
+            return self._value
 
+        todo()
+        return 0
 
 class Chip (abc.ABC):
 
     _inputs: list[Pin]
+    updated: bool = False
 
     @abc.abstractmethod
     def __init__ (self):
